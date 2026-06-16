@@ -633,12 +633,14 @@ function animateFormation(){
 }
 
 function animateSystem(){
-  // Orbit planets
+  // Orbit planets at Keplerian speeds (visual: Mercury ~8 sec/orbit, Neptune ~minutes)
   const g=sceneGroups[4];if(!g.visible)return;
   g.children.forEach(c=>{
     if(c._planet){
-      c._angle+=.0003*(365/Math.pow(c._planet.au,1.5)*365);
-      c.position.set(c._planet.au*Math.cos(c._angle),0,c._planet.au*Math.sin(c._angle));
+      // ω ∝ a^(-3/2) — Kepler's third law
+      // 0.003 base rate gives Mercury ~8 sec orbit at 60fps
+      c._angle += 0.003 / Math.pow(c._planet.au, 1.5);
+      c.position.set(c._planet.au*Math.cos(c._angle), 0, c._planet.au*Math.sin(c._angle));
     }
   });
 }
